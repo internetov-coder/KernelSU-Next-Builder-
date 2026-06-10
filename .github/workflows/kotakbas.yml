@@ -1,4 +1,4 @@
-name: Build Lavender Kernel (Stormbreaker 4.4) + KernelSU-Next
+name: Build Lavender Kernel (Stormbreaker 4.4) + KernelSU-Next FINAL
 
 on:
   workflow_dispatch:
@@ -38,7 +38,17 @@ jobs:
         run: |
           git clone --depth=1 https://github.com/internetov-coder/kernel_xiaomi_lavender -b newcam-eas-ksu-clean kernel-source
           cd kernel-source
-          ls -la drivers/kernelsu/ || echo "⚠️ Warning: KernelSU not found!"
+          
+          # Распаковываем KernelSU-Next правильно (без symlink)
+          rm -rf drivers/kernelsu KernelSU-Next 2>/dev/null || true
+          git clone https://github.com/KernelSU-Next/KernelSU-Next.git KernelSU-Next
+          cd KernelSU-Next && git checkout legacy && cd ..
+          mkdir -p drivers/kernelsu
+          cp -r KernelSU-Next/kernel/* drivers/kernelsu/
+          cp KernelSU-Next/uapi/* drivers/kernelsu/ 2>/dev/null || true
+          
+          echo "✅ KernelSU-Next files:"
+          ls -la drivers/kernelsu/ | head -10
           cd ..
 
       - name: ⚙️ Build Kernel
@@ -85,4 +95,4 @@ jobs:
             *.zip
             out/arch/arm64/boot/Image*
             out/arch/arm64/boot/dtbo.img
-
+            
