@@ -6,11 +6,11 @@ on:
       kernel_source:
         description: '🔗 URL kernel source'
         required: true
-        default: 'https://github.com/stormbreaker-project/kernel_xiaomi_lavender'
+        default: 'https://github.com/internetov-coder/kernel_xiaomi_lavender'
       kernel_branch:
         description: '🌿 Branch'
         required: true
-        default: 'newcam-eas'
+        default: 'newcam-eas-ksu-clean'
       defconfig:
         description: '🧪 Kernel defconfig'
         required: true
@@ -31,7 +31,7 @@ on:
       zip_name:
         description: '📝 Output ZIP base name'
         required: false
-        default: 'FINAL-Stormbreaker-Lavender'
+        default: 'lavender-shtormbreaker'
       developer:
         description: '👤 Developer name/ID'
         required: false
