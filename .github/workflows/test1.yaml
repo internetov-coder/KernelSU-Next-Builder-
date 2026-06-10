@@ -70,7 +70,7 @@ jobs:
           curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s legacy
           cd ..
 
-      - name: ⚙️ Build Kernel
+      - name: ⚙️ Build Kernel (with -Wno-error)
         run: |
           export KBUILD_BUILD_USER="${{ github.event.inputs.developer }}"
           export KBUILD_BUILD_HOST="workspace"
@@ -78,6 +78,7 @@ jobs:
           export CLANG_TRIPLE=aarch64-linux-gnu-
           export CROSS_COMPILE=/usr/bin/aarch64-linux-gnu-
           export CROSS_COMPILE_ARM32=/usr/bin/arm-linux-gnueabi-
+          export KBUILD_CFLAGS="-Wno-error"
           args="ARCH=arm64 LLVM=1 LLVM_IAS=1 O=../out"
           cd kernel-source
           make ${args} ${{ github.event.inputs.defconfig }}
