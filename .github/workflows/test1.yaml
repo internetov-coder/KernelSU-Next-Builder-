@@ -66,7 +66,9 @@ jobs:
       - name: 🧙 Inject KernelSU-Next (FIXED)
         if: ${{ github.event.inputs.enable_kernelsu_next }}
         run: |
+          cd kernel-source
           curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s legacy
+          cd ..
 
       - name: ⚙️ Build Kernel
         run: |
@@ -80,13 +82,14 @@ jobs:
           cd kernel-source
           make ${args} ${{ github.event.inputs.defconfig }}
           make -j$(nproc) ${args}
+          cd ..
 
       - name: 📦 Package with AnyKernel3
         if: ${{ github.event.inputs.anykernel }}
         run: |
           git clone --depth=1 -b "${{ github.event.inputs.anykernel_branch }}" "${{ github.event.inputs.anykernel_repo }}" AnyKernel3
           rm -rf AnyKernel3/.git* AnyKernel3/LICENSE AnyKernel3/README.md
-          IMG_PATH="../out/arch/arm64/boot"
+          IMG_PATH="out/arch/arm64/boot"
           for img in Image.gz-dtb Image-dtb Image.gz Image; do
             if [[ -f $IMG_PATH/$img ]]; then
               cp $IMG_PATH/$img AnyKernel3/$img
